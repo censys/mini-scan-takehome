@@ -19,6 +19,7 @@ var (
 func main() {
 	projectId := flag.String("project", "test-project", "GCP Project ID")
 	topicId := flag.String("topic", "scan-topic", "GCP PubSub Topic ID")
+	flag.Parse()
 
 	ctx := context.Background()
 

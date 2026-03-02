@@ -1,4 +1,4 @@
-FROM golang:1.20 AS builder
+FROM golang:1.24 AS builder
 
 # Build
 WORKDIR /src
@@ -8,7 +8,7 @@ COPY . .
 RUN CGO_ENABLED=0 go build -o scanner ./cmd/scanner
 
 # Copy binary into slim image
-FROM alpine
-WORKDIR app
+FROM alpine:3.21
+WORKDIR /app
 COPY --from=builder /src/scanner .
 CMD ["/app/scanner"]

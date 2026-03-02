@@ -40,3 +40,24 @@ services:
     build:
       context: .
       dockerfile: ./cmd/scanner/Dockerfile
+
+  # Runs the consumer (data processor)
+  consumer:
+    depends_on:
+      mk-subscription:
+        condition: service_completed_successfully
+    environment:
+      PUBSUB_EMULATOR_HOST: pubsub:8085
+      PUBSUB_PROJECT_ID: test-project
+      PUBSUB_SUBSCRIPTION_ID: scan-sub
+      DB_PATH: /data/scans.db
+      PUBSUB_MAX_OUTSTANDING: "100"
+      PUBSUB_NUM_GOROUTINES: "5"
+    volumes:
+      - scan-data:/data
+    build:
+      context: .
+      dockerfile: ./cmd/consumer/Dockerfile
+
+volumes:
+  scan-data:
